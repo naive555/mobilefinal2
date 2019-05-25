@@ -12,7 +12,6 @@ Future<List<Todo>> getTodos(int userid) async {
     var body = json.decode(response.body);
     for(int i = 0; i< body.length;i++){
       var todo = Todo.fromJson(body[i]);
-      print(todo);
       if(todo.userid == userid){
         todoList.add(todo);
       }
@@ -57,7 +56,7 @@ class TodoScreen extends StatelessWidget {
           children: <Widget>[
             RaisedButton(
               child: Text("BACK"),
-              onPressed: (){
+              onPressed: () {
                 Navigator.pop(context);
               },
             ),
@@ -89,9 +88,11 @@ class TodoScreen extends StatelessWidget {
                                     fontSize: 24
                                   ),
                                 ),
+                                Padding(padding: EdgeInsets.all(10)),
                                 Text(
                                   list[index].title,
                                 ),
+                                Padding(padding: EdgeInsets.all(10)),
                                 Text(
                                   list[index].completed,
                                 ),

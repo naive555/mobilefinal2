@@ -62,7 +62,7 @@ class FriendState extends State<FriendScreen> {
           children: <Widget>[
             RaisedButton(
               child: Text("BACK"),
-              onPressed: (){
+              onPressed: () {
                 Navigator.pop(context);
               },
             ),

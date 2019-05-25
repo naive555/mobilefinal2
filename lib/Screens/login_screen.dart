@@ -94,7 +94,6 @@ class LoginState extends State<LoginScreen> {
 
                 if(this.onForm == 2){
                   this.onForm = 0;
-                  print("${username.text}, ${password.text}");
                   await userValidate(username.text, password.text);
                   if(!this.validator){
                     Toast.show("Invalid user or password", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);

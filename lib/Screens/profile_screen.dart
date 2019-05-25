@@ -29,6 +29,14 @@ class ProfileState extends State<ProfileScreen> {
     return count;
   }
 
+  bool isNumber(String s) {
+    if(s == null) {
+      return false;
+    }
+    return double.parse(s, (e) => null) != null;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,11 +85,11 @@ class ProfileState extends State<ProfileScreen> {
                 icon: Icon(Icons.calendar_view_day),
               ),
               controller: age,
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.text,
               validator: (val) {
                 if (val.isEmpty) {
                   return 'Plese fill out this form';
-                } else if (int.parse(val) < 10 || int.parse(val) > 80) {
+                } else if (!isNumber(val) || int.parse(val) < 10 || int.parse(val) > 80) {
                   return "Age ต้องเป็นตัวเลขเท่านั้นและอยู่ในช่วง 10-80";
                 }
               },
@@ -119,7 +127,6 @@ class ProfileState extends State<ProfileScreen> {
                   var userList = await allAcc;
                   for(var i=0; i < userList.length;i++){
                     if (acc.userid == userList[i].userid && CurrentAccount.ID != userList[i].id){
-                      print('Taken');
                       this.validator = true;
                       break;
                     }
@@ -140,15 +147,6 @@ class ProfileState extends State<ProfileScreen> {
                 }
 
                 this.validator = false;
-                Future showAllUser() async {
-                  var userList = await allAcc;
-                  for(var i=0; i < userList.length;i++){
-                    print(userList[i]);
-                    }
-                  }
-
-                showAllUser();
-                print(CurrentAccount.whoCurrent());
               },
             ),
           ],

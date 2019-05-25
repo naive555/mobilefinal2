@@ -28,6 +28,13 @@ class RegisterState extends State<RegisterScreen> {
     return count;
   }
 
+  bool isNumber(String s) {
+    if(s == null) {
+      return false;
+    }
+    return double.parse(s, (e) => null) != null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +56,7 @@ class RegisterState extends State<RegisterScreen> {
               validator: (val) {
                 if (val.isEmpty) {
                   return 'Plese fill out this form';
-                } else if (val.length < 6 || val.length > 12) {
+                } else if (!isNumber(val) ||val.length < 6 || val.length > 12) {
                   return 'User ID ต้องมีความยาวในช่วง 6-12 ตัวอักษร';
                 } else if(this.validator)
                   return 'This User is Taken';
@@ -76,7 +83,7 @@ class RegisterState extends State<RegisterScreen> {
                 icon: Icon(Icons.calendar_view_day),
               ),
               controller: age,
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.text,
               validator: (val) {
                 if (val.isEmpty) {
                   return 'Plese fill out this form';
@@ -123,7 +130,6 @@ class RegisterState extends State<RegisterScreen> {
                 }
 
                 await userNewIn(account);
-                print(this.validator);
 
                 if (_formkey.currentState.validate()) {
                   if (!this.validator) {
@@ -133,20 +139,10 @@ class RegisterState extends State<RegisterScreen> {
                     password.text = "";
                     await acc.insertUser(account);
                     Navigator.pop(context);
-                    print('insert complete');
                   }
                 }
 
                 this.validator = false;
-
-                Future showAllUser() async {
-                  var userList = await allAcc;
-                  for(var i=0; i < userList.length;i++){
-                    print(userList[i]);
-                  }
-                }
-
-                showAllUser();
               },
             ),
           ],
