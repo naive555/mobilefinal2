@@ -56,7 +56,7 @@ class RegisterState extends State<RegisterScreen> {
               validator: (val) {
                 if (val.isEmpty) {
                   return 'Plese fill out this form';
-                } else if (!isNumber(val) ||val.length < 6 || val.length > 12) {
+                } else if (val.length < 6 || val.length > 12) {
                   return 'User ID ต้องมีความยาวในช่วง 6-12 ตัวอักษร';
                 } else if(this.validator)
                   return 'This User is Taken';
@@ -87,7 +87,7 @@ class RegisterState extends State<RegisterScreen> {
               validator: (val) {
                 if (val.isEmpty) {
                   return 'Plese fill out this form';
-                } else if (int.parse(val) < 10 || int.parse(val) > 80) {
+                } else if (!isNumber(val) || int.parse(val) < 10 || int.parse(val) > 80) {
                   return "Age ต้องเป็นตัวเลขเท่านั้นและอยู่ในช่วง 10-80";
                 }
               },
