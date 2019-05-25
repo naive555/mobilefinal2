@@ -105,24 +105,24 @@ class RegisterState extends State<RegisterScreen> {
               child: Text('Login'.toUpperCase()),
               onPressed: () async {
                 await acc.open("user.db");
-                Future<List<Account>> allUser = acc.getAllUser();
+                Future<List<Account>> allAcc = acc.getAllUser();
                 Account account = Account();
                 account.userid = username.text;
                 account.name = name.text;
                 account.age = age.text;
                 account.password = password.text;
 
-                Future isNewUserIn(Account user) async {
-                  var userList = await allUser;
+                Future userNewIn(Account acc) async {
+                  var userList = await allAcc;
                   for(var i=0; i < userList.length;i++){
-                    if (user.userid == userList[i].userid){
+                    if (acc.userid == userList[i].userid){
                       this.validator = true;
                       break;
                     }
                   }
                 }
 
-                await isNewUserIn(account);
+                await userNewIn(account);
                 print(this.validator);
 
                 if (_formkey.currentState.validate()) {
@@ -140,7 +140,7 @@ class RegisterState extends State<RegisterScreen> {
                 this.validator = false;
 
                 Future showAllUser() async {
-                  var userList = await allUser;
+                  var userList = await allAcc;
                   for(var i=0; i < userList.length;i++){
                     print(userList[i]);
                   }
