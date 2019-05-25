@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mobilefinal2/sqlite/user_db.dart';
+import '../currentuser/current_user.dart';
+import 'package:toast/toast.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -12,6 +15,7 @@ class LoginState extends State<LoginScreen> {
   final _formkey = GlobalKey<FormState>();
   final username = TextEditingController();
   final password = TextEditingController();
+  AccountUtil acc = AccountUtil();
   int onForm = 0;
   bool validator = false;
 
@@ -24,6 +28,7 @@ class LoginState extends State<LoginScreen> {
         centerTitle: true,
       ),
       body: Form(
+        key: _formkey,
         child: ListView(
           padding: EdgeInsets.all(20),
           children: <Widget>[
@@ -40,7 +45,10 @@ class LoginState extends State<LoginScreen> {
             keyboardType: TextInputType.text,
             validator: (val) {
               if (val.isNotEmpty) {
-                onForm ++;
+                onForm += 1;
+              } else {
+                onForm = 0;
+                return 'Plese fill out this form';
               }
             },
             ),
@@ -50,17 +58,52 @@ class LoginState extends State<LoginScreen> {
                 icon: Icon(Icons.lock)
               ),
               controller: password,
+              obscureText: true,
               keyboardType: TextInputType.text,
               validator: (val) {
                 if (val.isNotEmpty) {
-                  onForm ++;
+                  onForm += 1;
+                } else {
+                  onForm = 0;
+                  return 'Plese fill out this form';
                 }
               },
             ),
             RaisedButton(
               child: Text('Login'.toUpperCase()),
-              onPressed: () {
+              onPressed: () async {
                 _formkey.currentState.validate();
+                await acc.open("user.db");
+                Future<List<Account>> allUser = acc.getAllUser();
+
+                Future userValidate(String userid, String password) async {
+                  var userList = await allUser;
+                  for(var i=0; i < userList.length;i++){
+                    if (userid == userList[i].userid && password == userList[i].password){
+                      CurrentAccount.ID = userList[i].id;
+                      CurrentAccount.USERID = userList[i].userid;
+                      CurrentAccount.NAME = userList[i].name;
+                      CurrentAccount.AGE = userList[i].age;
+                      CurrentAccount.PASSWORD = userList[i].password;
+                      CurrentAccount.QUOTE = userList[i].quote;
+                      this.validator = true;
+                      break;
+                    }
+                  }
+                }
+
+                if(this.onForm == 2){
+                  this.onForm = 0;
+                  print("${username.text}, ${password.text}");
+                  await userValidate(username.text, password.text);
+                  if(!this.validator){
+                    Toast.show("Invalid user or password", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
+                  } else {
+                    Navigator.pushReplacementNamed(context, '/home');
+                    username.text = '';
+                    password.text = '';
+                  }
+                }
               },
             ),
             FlatButton(
@@ -68,6 +111,7 @@ class LoginState extends State<LoginScreen> {
               onPressed: () {
                 Navigator.pushNamed(context, '/register');
               },
+              padding: EdgeInsets.only(left: 180.0),
             )
           ],
         ),
