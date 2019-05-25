@@ -109,7 +109,7 @@ class RegisterState extends State<RegisterScreen> {
               }
             ),
             RaisedButton(
-              child: Text('Login'.toUpperCase()),
+              child: Text('Register New Account'.toUpperCase()),
               onPressed: () async {
                 await acc.open("user.db");
                 Future<List<Account>> allAcc = acc.getAllUser();
